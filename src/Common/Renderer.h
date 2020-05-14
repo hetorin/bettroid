@@ -15,7 +15,7 @@ class Renderer : public Component {
 
     public :
         Renderer();
-        int init();
+        int init(const GLfloat *vertices);
         int update();
         void setShaders(const char* vertex_shader_source, const char* fragment_shader_source);
 };
