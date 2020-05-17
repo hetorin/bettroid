@@ -8,7 +8,19 @@ int Game::run() {
     initWindow();
     loadAssets();
     gameLoop();
+}
 
+std::shared_ptr<GameObject> Game::createGameObject(const GLfloat *vertices, const char *vertex_shader_source, const char *fragment_shader_source)
+{
+    auto triangleRenderer = std::make_shared<Renderer>();
+    triangleRenderer->init(vertices);
+    triangleRenderer->setShaders(vertex_shader_source, fragment_shader_source);
+    auto triangleGameObject = std::make_shared<GameObject>();
+    auto emptyGameObject = std::make_shared<GameObject>();
+    triangleGameObject->addChildren(emptyGameObject);
+    triangleGameObject->addComponent(triangleRenderer);
+
+    return triangleGameObject;
 }
 
 int Game::initWindow() {
@@ -92,6 +104,7 @@ int Game::gameLoop() {
         }
 )glsl";
 
+    /*
     auto triangleRenderer1 = std::make_shared<Renderer>();
     triangleRenderer1->init(vertices1);
     triangleRenderer1->setShaders(vertex_shader_source, fragment_shader_source1);
@@ -115,11 +128,12 @@ int Game::gameLoop() {
     auto emptyGameObject3 = std::make_shared<GameObject>();
     redTriangleOfDeath3->addChildren(emptyGameObject3);
     redTriangleOfDeath3->addComponent(triangleRenderer3);
+    */
 
     Scene bossFight = Scene();
-    bossFight.addGameObject(redTriangleOfDeath1);
-    bossFight.addGameObject(redTriangleOfDeath2);
-    bossFight.addGameObject(redTriangleOfDeath3);
+    bossFight.addGameObject(createGameObject(vertices1, vertex_shader_source, fragment_shader_source1));
+    bossFight.addGameObject(createGameObject(vertices2, vertex_shader_source, fragment_shader_source2));
+    bossFight.addGameObject(createGameObject(vertices3, vertex_shader_source, fragment_shader_source3));
 
     while (!glfwWindowShouldClose(window))
     {
