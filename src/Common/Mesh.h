@@ -11,7 +11,7 @@
 
 class Mesh {
 protected:
-    GLfloat vertices[];
+    std::vector<GLfloat> vertices;
 
 public:
     Mesh();
@@ -19,5 +19,6 @@ public:
     GLfloat* getFirstVertexPointer();
     int      getNumOfVertices();
 };
+
 
 #endif //BETTROID_MESH_H
