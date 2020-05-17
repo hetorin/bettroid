@@ -18,9 +18,7 @@ private:
     std::unique_ptr<Scene> currentScene;
 
     std::shared_ptr<GameObject>
-    createGameObject(const GLfloat *,
-                     const char *,
-                     const char *);
+    createGameObject(const char *, const char *);
     int initWindow();
     int loadAssets();
     int gameLoop();

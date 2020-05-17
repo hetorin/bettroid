@@ -12,8 +12,7 @@ int Game::run() {
 }
 
 std::shared_ptr<GameObject>
-Game::createGameObject(const GLfloat *vertices,
-                       const char *vertex_shader_source,
+Game::createGameObject(const char *vertex_shader_source,
                        const char *fragment_shader_source)
 {
     std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
@@ -59,66 +58,29 @@ int Game::initWindow() {
 
 int Game::gameLoop() {
     int width, height;
-    static const GLfloat vertices1[] = {
-          -0.5f, -0.5f, 0.0f,
-          0.5f, -0.5f, 0.0f,
-          0.0f,  0.5f, 0.0f
-    };
-    static const GLfloat vertices2[] = {
-          -0.3f, -0.3f, 0.0f,
-          0.3f, -0.4f, 0.0f,
-          0.0f,  0.3f, 0.0f
-    };
-    static const GLfloat vertices3[] = {
-          -0.1f, -0.1f, 0.0f,
-          0.1f, -0.2f, 0.0f,
-          0.0f,  0.1f, 0.0f
-    };
-    
+
     const char* vertex_shader_source = R"glsl(
-    #version 330 core
-    layout(location = 0) in vec3 vertexPosition_modelspace;
-    void main()
-    {
-        gl_Position.xyz = vertexPosition_modelspace;
-        gl_Position.w = 1.0;
-    }
-)glsl";
-    const char* fragment_shader_source1 = R"glsl(
-		#version 330 core
-        out vec3 color;
-        void main(){
-            color = vec3(1,0,0);
-        }
-)glsl";
-    const char* fragment_shader_source2 = R"glsl(
-		#version 330 core
-        out vec3 color;
-        void main(){
-            color = vec3(0,1,0);
-        }
-)glsl";
-    const char* fragment_shader_source3 = R"glsl(
-		#version 330 core
-        out vec3 color;
-        void main(){
-            color = vec3(0,0,1);
-        }
-)glsl";
+       #version 330 core
+       layout(location = 0) in vec3 vertexPosition_modelspace;
+       void main()
+       {
+           gl_Position.xyz = vertexPosition_modelspace;
+           gl_Position.w = 1.0;
+       }
+    )glsl";
+
+    const char* fragment_shader_source = R"glsl(
+		 #version 330 core
+       out vec3 color;
+       void main(){
+           color = vec3(1,0,0);
+       }
+    )glsl";
 
     Scene bossFight = Scene();
     bossFight.addGameObject(
-       createGameObject(vertices1,
-                        vertex_shader_source,
-                        fragment_shader_source1));
-    bossFight.addGameObject(
-       createGameObject(vertices2,
-                        vertex_shader_source,
-                        fragment_shader_source2));
-    bossFight.addGameObject(
-       createGameObject(vertices3,
-                        vertex_shader_source,
-                        fragment_shader_source3));
+       createGameObject(vertex_shader_source,
+                        fragment_shader_source));
     while (!glfwWindowShouldClose(window))
     {
         glfwGetFramebufferSize(window, &width, &height);
