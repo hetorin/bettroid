@@ -12,6 +12,8 @@ add_executable(Bettroid
    src/Common/Component.cpp
    src/Common/GameObject.cpp
    src/Common/Scene.cpp
-   src/Common/Transform.cpp)
+   src/Common/Transform.cpp
+   src/Common/Mesh.cpp
+   src/Common/Quad.cpp)
 
 target_link_libraries(Bettroid PUBLIC glew32 glfw3 opengl32)

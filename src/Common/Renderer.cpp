@@ -5,20 +5,28 @@
 #include <GL/glew.h>
 #include "Renderer.h"
 
-int Renderer::init(const GLfloat *vertices) {
+int Renderer::init() {
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices)*9, vertices, GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER,
+                 mesh->getNumOfVertices()*sizeof(GLfloat),
+                 mesh->getFirstVertexPointer(),
+                 GL_STATIC_DRAW);
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 6*sizeof(int),
+                 &(mesh->faces.front()),
+                 GL_STATIC_DRAW);
     return 0;
 }
 
 int Renderer::update() {
     glUseProgram(shaderProgram);
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(
             0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
             3,                  // size
@@ -28,12 +36,12 @@ int Renderer::update() {
             (void*)0            // array buffer offset
     );
     // Draw the triangle !
-    glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glDisableVertexAttribArray(0);
     return 0;
 }
 
-Renderer::Renderer() {}
+Renderer::Renderer(std::shared_ptr<Mesh> mesh) : mesh{mesh} {}
 
 void Renderer::setShaders(const char *vertex_shader_source, const char *fragment_shader_source) {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);

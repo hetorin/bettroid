@@ -3,6 +3,7 @@
 //
 
 #include "Game.h"
+#include "Common/Quad.h"
 
 int Game::run() {
     initWindow();
@@ -15,12 +16,12 @@ Game::createGameObject(const GLfloat *vertices,
                        const char *vertex_shader_source,
                        const char *fragment_shader_source)
 {
-    auto triangleRenderer = std::make_shared<Renderer>();
-    triangleRenderer->init(vertices);
+    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+    std::shared_ptr<Quad> quad = std::make_shared<Quad>();
+    auto triangleRenderer = std::make_shared<Renderer>(quad);
+    triangleRenderer->init();
     triangleRenderer->setShaders(vertex_shader_source, fragment_shader_source);
     auto triangleGameObject = std::make_shared<GameObject>();
-    auto emptyGameObject = std::make_shared<GameObject>();
-    triangleGameObject->addChildren(emptyGameObject);
     triangleGameObject->addComponent(triangleRenderer);
 
     return triangleGameObject;
